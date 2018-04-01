@@ -1,0 +1,31 @@
+{
+  "manifest_version": 2,
+  "name": "Red Flags of Quackery",
+  "version": "0.1",
+  "version_name": "0.1",
+  "description": "Flags potential quackery",
+  "author": "Colby Vorland",
+  "background": {
+    "scripts":["js/jquery.js","eventPage.js"],
+    "persistent": false
+  },
+  "content_scripts": [{
+  "js": ["js/jquery.js","contentscript.js"],
+  "matches": [ "<all_urls>" ],
+    "run_at": "document_end"
+  }],
+  "_icons": {"16": "/images/icon16.png",
+      "48": "/images/icon48.png",
+      "128": "/images/icon128.png"
+         },
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "offline_enabled": true,
+  "permissions": [
+    "activeTab"
+  ],
+  "short_name": "Quack Flags",
+  "web_accessible_resources": [
+    "/images/",
+    "alert.html"
+  ]
+}
