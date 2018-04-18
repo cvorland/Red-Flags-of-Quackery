@@ -48,9 +48,23 @@ function match_func(val){
 var body = $('body *:not(:has(*)):visible').text(); //ignore hidden text to exclude script, style tags etc.
 //console.log(body)
 
+//Look for matches in document body
 $.each(flag_list, function(key, val){
 	match_func(val);
 })
+
+//Sort list to put most matches first
+match_list.sort(function(a, b){
+  if(a[1] == b[1]){
+    return 0;
+  }
+  if(a[1] < b[1]){
+    return 1;
+  }else{
+    return -1;
+  }
+});
+
 if(match_list.length > 0){
   stop = 'no';
   //Rule 1: Check if DOI in meta tags, if so, it is a scholarly website and we should not show alert.
@@ -63,20 +77,21 @@ if(match_list.length > 0){
       return false;
     }
   })
-
+  //Rule 2 (being conservative for now): Check if there are at least 3 unique keyword matches on the page and at least 1 of them has multiple matches. If so, show the panel
+  if(match_list.length < 3){
+    stop = 'yes';
+  }
+  var counter = 0;
+  $.each(match_list,function(key,tag){
+    if(tag[1] > 1){
+      counter ++
+    }
+  })
+  if(counter == 0){
+    stop = 'yes';
+  }
   //Show alert if all rules pass
   if(stop == 'no'){
-    //Sort list to put most matches first
-    match_list.sort(function(a, b){
-      if(a[1] == b[1]){
-        return 0;
-      }
-      if(a[1] < b[1]){
-        return 1;
-      }else{
-        return -1;
-      }
-    });
 	 to_alert(match_list)
   }
 }
